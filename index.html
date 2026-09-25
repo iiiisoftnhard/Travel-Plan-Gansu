@@ -273,7 +273,7 @@ textarea.input{min-height:90px;resize:vertical}
       </div>
       <div id="guideList" style="margin-top:12px"></div>
     </div>
-    <p class="note">你新增的厕所攻略、旅行攻略和备注都会保存在当前浏览器本机。</p>
+    <p class="note">新增的厕所攻略、旅行攻略和备注会保存到 Cloudflare D1，并在两个人之间同步。</p>
   </section>
 
   <section class="section" id="expense">
@@ -318,7 +318,7 @@ textarea.input{min-height:90px;resize:vertical}
       <div id="settlement" class="settle">目前还没有花费记录。</div>
       <div id="expenseList" style="margin-top:10px"><div class="empty">暂无记录</div></div>
     </div>
-    <p class="note">记录会保存在当前浏览器本机。默认按两人 50/50 平摊计算谁需要补给谁。</p>
+    <p class="note">花费记录保存到 Cloudflare D1，共享链接中的王 / 欧都能看到。默认按两人 50/50 平摊计算谁需要补给谁。</p>
   </section>
 
   <section class="section" id="todo">
@@ -341,147 +341,160 @@ textarea.input{min-height:90px;resize:vertical}
   <a href="#flight">航班</a><a href="#stay">住宿</a><a href="#days">行程</a><a href="#toilet">厕所</a><a href="#notes">攻略</a><a href="#expense">花费</a><a href="#todo">待办</a>
 </div></div>
 
+
 <script>
-const KEY='gannan_expenses_v1';
-function getExpenses(){try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){return []}}
-function saveExpenses(x){localStorage.setItem(KEY,JSON.stringify(x))}
+const API = '/api';
+
 function money(n){return '¥'+Number(n||0).toFixed(2)}
-function addExpense(){
+function escapeHtml(s){return String(s ?? '').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+async function api(path, options={}){
+  const res = await fetch(API + path, {
+    headers: {'Content-Type':'application/json', ...(options.headers||{})},
+    ...options
+  });
+  const data = await res.json().catch(()=>({}));
+  if(!res.ok) throw new Error(data.error || '请求失败');
+  return data;
+}
+
+async function addExpense(){
   const payer=document.getElementById('payer').value;
   const amount=parseFloat(document.getElementById('amount').value);
   const category=document.getElementById('category').value;
   const date=document.getElementById('expDate').value;
   const note=document.getElementById('note').value.trim();
   if(!amount || amount<=0){alert('请输入正确金额');return}
-  const arr=getExpenses();
-  arr.unshift({id:Date.now(),payer,amount,category,date,note});
-  saveExpenses(arr);
-  document.getElementById('amount').value='';
-  document.getElementById('note').value='';
-  renderExpenses();
+  try{
+    await api('/expenses',{method:'POST',body:JSON.stringify({payer,amount,category,date,note})});
+    document.getElementById('amount').value='';
+    document.getElementById('note').value='';
+    await renderExpenses();
+  }catch(e){alert('保存失败：'+e.message)}
 }
-function delExpense(id){
-  const arr=getExpenses().filter(x=>x.id!==id);
-  saveExpenses(arr); renderExpenses();
+async function delExpense(id){
+  if(!confirm('确定删除这笔花费吗？')) return;
+  try{await api('/expenses/'+id,{method:'DELETE'}); await renderExpenses()}
+  catch(e){alert('删除失败：'+e.message)}
 }
-function renderExpenses(){
-  const arr=getExpenses();
-  const total=arr.reduce((s,x)=>s+Number(x.amount),0);
-  const wang=arr.filter(x=>x.payer==='王').reduce((s,x)=>s+Number(x.amount),0);
-  const ou=arr.filter(x=>x.payer==='欧').reduce((s,x)=>s+Number(x.amount),0);
-  document.getElementById('totalAmt').textContent=money(total);
-  document.getElementById('wangAmt').textContent=money(wang);
-  document.getElementById('ouAmt').textContent=money(ou);
-  const half=total/2;
-  const diff=wang-half;
-  const st=document.getElementById('settlement');
-  if(total===0){st.textContent='目前还没有花费记录。'}
-  else if(Math.abs(diff)<0.005){st.textContent='两人目前已结平，无需补款。'}
-  else if(diff>0){st.textContent='按 50/50 平摊：欧需补给王 '+money(diff)+'。每人应承担 '+money(half)+'。'}
-  else{st.textContent='按 50/50 平摊：王需补给欧 '+money(-diff)+'。每人应承担 '+money(half)+'。'}
+async function renderExpenses(){
   const list=document.getElementById('expenseList');
-  if(!arr.length){list.innerHTML='<div class="empty">暂无记录</div>';return}
-  list.innerHTML=arr.map(x=>`
-    <div class="expense-row">
-      <div class="expense-main">
-        <div class="expense-title">${escapeHtml(x.note||x.category)}</div>
-        <div class="expense-sub">${escapeHtml(x.date||'未填日期')} · ${escapeHtml(x.category)} · ${escapeHtml(x.payer)}付款</div>
-      </div>
-      <div style="text-align:right">
-        <div class="amount">${money(x.amount)}</div>
-        <button class="delete-btn" onclick="delExpense(${x.id})">删除</button>
-      </div>
-    </div>`).join('');
+  try{
+    const arr=await api('/expenses');
+    const total=arr.reduce((s,x)=>s+Number(x.amount),0);
+    const wang=arr.filter(x=>x.payer==='王').reduce((s,x)=>s+Number(x.amount),0);
+    const ou=arr.filter(x=>x.payer==='欧').reduce((s,x)=>s+Number(x.amount),0);
+    document.getElementById('totalAmt').textContent=money(total);
+    document.getElementById('wangAmt').textContent=money(wang);
+    document.getElementById('ouAmt').textContent=money(ou);
+    const half=total/2, diff=wang-half, st=document.getElementById('settlement');
+    if(total===0) st.textContent='目前还没有花费记录。';
+    else if(Math.abs(diff)<0.005) st.textContent='两人目前已结平，无需补款。';
+    else if(diff>0) st.textContent='按 50/50 平摊：欧需补给王 '+money(diff)+'。每人应承担 '+money(half)+'。';
+    else st.textContent='按 50/50 平摊：王需补给欧 '+money(-diff)+'。每人应承担 '+money(half)+'。';
+    if(!arr.length){list.innerHTML='<div class="empty">暂无记录</div>';return}
+    list.innerHTML=arr.map(x=>`
+      <div class="expense-row">
+        <div class="expense-main">
+          <div class="expense-title">${escapeHtml(x.note||x.category)}</div>
+          <div class="expense-sub">${escapeHtml(x.date||'未填日期')} · ${escapeHtml(x.category)} · ${escapeHtml(x.payer)}付款</div>
+        </div>
+        <div style="text-align:right">
+          <div class="amount">${money(x.amount)}</div>
+          <button class="delete-btn" onclick="delExpense(${x.id})">删除</button>
+        </div>
+      </div>`).join('');
+  }catch(e){
+    list.innerHTML='<div class="empty">共享数据库尚未连接：'+escapeHtml(e.message)+'</div>';
+  }
 }
-function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
-document.addEventListener('DOMContentLoaded',()=>{
-  const d=document.getElementById('expDate');
-  if(d && !d.value) d.value='2026-09-25';
-  renderExpenses();
-});
-</script>
 
-<script>
-const TOILET_KEY='gannan_toilet_tips_v1';
-const GUIDE_KEY='gannan_guide_notes_v1';
-
-function loadList(key){
-  try{return JSON.parse(localStorage.getItem(key)||'[]')}catch(e){return []}
-}
-function saveList(key,arr){localStorage.setItem(key,JSON.stringify(arr))}
-
-function addToiletTip(){
+async function addToiletTip(){
   const place=document.getElementById('toiletPlace').value.trim();
   const rating=document.getElementById('toiletRating').value;
   const note=document.getElementById('toiletNote').value.trim();
   if(!place && !note){alert('至少填写地点或攻略内容');return}
-  const arr=loadList(TOILET_KEY);
-  arr.unshift({id:Date.now(),place:place||'未命名地点',rating,note});
-  saveList(TOILET_KEY,arr);
-  document.getElementById('toiletPlace').value='';
-  document.getElementById('toiletNote').value='';
-  renderToiletTips();
+  try{
+    await api('/toilets',{method:'POST',body:JSON.stringify({place:place||'未命名地点',rating,note})});
+    document.getElementById('toiletPlace').value='';
+    document.getElementById('toiletNote').value='';
+    await renderToiletTips();
+  }catch(e){alert('保存失败：'+e.message)}
 }
-function delToiletTip(id){
-  saveList(TOILET_KEY,loadList(TOILET_KEY).filter(x=>x.id!==id));
-  renderToiletTips();
+async function delToiletTip(id){
+  if(!confirm('确定删除这条厕所攻略吗？')) return;
+  try{await api('/toilets/'+id,{method:'DELETE'}); await renderToiletTips()}
+  catch(e){alert('删除失败：'+e.message)}
 }
-function renderToiletTips(){
-  const arr=loadList(TOILET_KEY);
+async function renderToiletTips(){
   const box=document.getElementById('toiletUserList');
   if(!box) return;
-  if(!arr.length){box.innerHTML='<div class="empty">你还没有新增厕所攻略。</div>';return}
-  const labels={good:'推荐',normal:'一般',danger:'避雷'};
-  box.innerHTML=arr.map(x=>`
-    <div class="tip-card ${x.rating==='good'?'good':x.rating==='danger'?'danger':''}">
-      <div class="tip-head">
-        <div>
-          <div class="tip-title">${escapeHtml(x.place)}</div>
-          <div class="tip-place">${labels[x.rating]||'一般'}</div>
+  try{
+    const arr=await api('/toilets');
+    if(!arr.length){box.innerHTML='<div class="empty">你还没有新增厕所攻略。</div>';return}
+    const labels={good:'推荐',normal:'一般',danger:'避雷'};
+    box.innerHTML=arr.map(x=>`
+      <div class="tip-card ${x.rating==='good'?'good':x.rating==='danger'?'danger':''}">
+        <div class="tip-head">
+          <div>
+            <div class="tip-title">${escapeHtml(x.place)}</div>
+            <div class="tip-place">${labels[x.rating]||'一般'}</div>
+          </div>
+          <button class="delete-btn" onclick="delToiletTip(${x.id})">删除</button>
         </div>
-        <button class="delete-btn" onclick="delToiletTip(${x.id})">删除</button>
-      </div>
-      <div class="tip-body">${escapeHtml(x.note||'')}</div>
-    </div>`).join('');
+        <div class="tip-body">${escapeHtml(x.note||'')}</div>
+      </div>`).join('');
+  }catch(e){
+    box.innerHTML='<div class="empty">共享数据库尚未连接：'+escapeHtml(e.message)+'</div>';
+  }
 }
 
-function addGuideNote(){
+async function addGuideNote(){
   const title=document.getElementById('guideTitle').value.trim();
   const type=document.getElementById('guideType').value;
   const body=document.getElementById('guideBody').value.trim();
   if(!title && !body){alert('至少填写标题或内容');return}
-  const arr=loadList(GUIDE_KEY);
-  arr.unshift({id:Date.now(),title:title||'未命名',type,body});
-  saveList(GUIDE_KEY,arr);
-  document.getElementById('guideTitle').value='';
-  document.getElementById('guideBody').value='';
-  renderGuideNotes();
+  try{
+    await api('/notes',{method:'POST',body:JSON.stringify({title:title||'未命名',type,body})});
+    document.getElementById('guideTitle').value='';
+    document.getElementById('guideBody').value='';
+    await renderGuideNotes();
+  }catch(e){alert('保存失败：'+e.message)}
 }
-function delGuideNote(id){
-  saveList(GUIDE_KEY,loadList(GUIDE_KEY).filter(x=>x.id!==id));
-  renderGuideNotes();
+async function delGuideNote(id){
+  if(!confirm('确定删除这条攻略/备注吗？')) return;
+  try{await api('/notes/'+id,{method:'DELETE'}); await renderGuideNotes()}
+  catch(e){alert('删除失败：'+e.message)}
 }
-function renderGuideNotes(){
-  const arr=loadList(GUIDE_KEY);
+async function renderGuideNotes(){
   const box=document.getElementById('guideList');
   if(!box) return;
-  if(!arr.length){box.innerHTML='<div class="empty">暂无新增攻略或备注。</div>';return}
-  box.innerHTML=arr.map(x=>`
-    <div class="tip-card">
-      <div class="tip-head">
-        <div>
-          <div class="tip-title">${escapeHtml(x.title)}</div>
-          <div class="tip-place">${escapeHtml(x.type)}</div>
+  try{
+    const arr=await api('/notes');
+    if(!arr.length){box.innerHTML='<div class="empty">暂无新增攻略或备注。</div>';return}
+    box.innerHTML=arr.map(x=>`
+      <div class="tip-card">
+        <div class="tip-head">
+          <div>
+            <div class="tip-title">${escapeHtml(x.title)}</div>
+            <div class="tip-place">${escapeHtml(x.type)}</div>
+          </div>
+          <button class="delete-btn" onclick="delGuideNote(${x.id})">删除</button>
         </div>
-        <button class="delete-btn" onclick="delGuideNote(${x.id})">删除</button>
-      </div>
-      <div class="tip-body">${escapeHtml(x.body||'')}</div>
-    </div>`).join('');
+        <div class="tip-body">${escapeHtml(x.body||'')}</div>
+      </div>`).join('');
+  }catch(e){
+    box.innerHTML='<div class="empty">共享数据库尚未连接：'+escapeHtml(e.message)+'</div>';
+  }
 }
+
 document.addEventListener('DOMContentLoaded',()=>{
+  const d=document.getElementById('expDate');
+  if(d && !d.value) d.value='2026-09-25';
+  renderExpenses();
   renderToiletTips();
   renderGuideNotes();
 });
 </script>
+
 </body>
 </html>
