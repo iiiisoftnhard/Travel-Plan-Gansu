@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>甘南旅行计划 2026 · 新版路线</title>
+<style>
+:root{--bg:#f6f4ef;--card:#fff;--text:#1f2a24;--muted:#718078;--green:#2f6b4f;--green2:#dfeae3;--line:#e7e6e0;--warn:#9b5b2f}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Helvetica Neue",Arial,sans-serif;color:var(--text)}
+.wrap{max-width:760px;margin:auto;padding:18px 16px 88px}
+.hero{background:linear-gradient(135deg,#244b38,#6d8c72);color:#fff;border-radius:24px;padding:24px 22px 22px;box-shadow:0 8px 30px rgba(0,0,0,.12)}
+.hero .eyebrow{opacity:.78;font-size:13px;letter-spacing:.08em}
+.hero h1{font-size:28px;margin:8px 0 6px}
+.hero p{margin:0;opacity:.9;line-height:1.55}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.pill{background:rgba(255,255,255,.16);padding:7px 10px;border-radius:999px;font-size:12px}
+.section{margin-top:22px}
+.section h2{font-size:18px;margin:0 0 12px}
+.card{background:var(--card);border-radius:18px;padding:16px;box-shadow:0 2px 12px rgba(0,0,0,.045);margin-bottom:12px}
+.route{display:grid;grid-template-columns:56px 1fr;gap:10px}
+.date{font-weight:700;color:var(--green)}
+.title{font-weight:700}
+.meta{color:var(--muted);font-size:13px;margin-top:4px;line-height:1.5}
+.tag{display:inline-block;background:var(--green2);color:var(--green);font-size:12px;padding:4px 8px;border-radius:999px;margin:6px 6px 0 0}
+.tag.warn{background:#fff3e8;color:var(--warn)}
+.flight{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px}
+.airport strong{display:block;font-size:25px}
+.center{text-align:center;color:var(--muted);font-size:12px}
+.center .plane{font-size:22px;color:var(--green)}
+.timeline{border-left:2px solid #d7ded9;margin-left:7px;padding-left:18px}
+.stop{position:relative;margin:0 0 18px}
+.stop:before{content:"";position:absolute;width:10px;height:10px;border-radius:50%;background:var(--green);left:-24px;top:5px;box-shadow:0 0 0 4px #edf3ef}
+.todo{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-bottom:1px solid var(--line)}
+.todo:last-child{border-bottom:0}
+.box{width:18px;height:18px;border:1.6px solid #aeb8b1;border-radius:5px;flex:0 0 auto;margin-top:1px}
+.note{font-size:12px;color:var(--muted);line-height:1.6}
+.small{font-size:12px}
+.footer-nav{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,.92);backdrop-filter:blur(12px);border-top:1px solid #e8e8e5}
+.footer-nav .inner{max-width:760px;margin:auto;display:flex;justify-content:space-around;padding:10px 0 calc(10px + env(safe-area-inset-bottom));font-size:12px;color:#53625a}
+a{color:inherit;text-decoration:none}
+
+.expense-form{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.expense-form .full{grid-column:1/-1}
+.input,select{width:100%;border:1px solid #dde3de;background:#fafbf9;border-radius:12px;padding:11px 12px;font-size:14px;color:var(--text);outline:none}
+.input:focus,select:focus{border-color:#7a9a87;background:#fff}
+.btn{border:0;border-radius:12px;padding:11px 14px;background:var(--green);color:#fff;font-size:14px;font-weight:700;width:100%}
+.summary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
+.summary-box{background:#f3f6f3;border-radius:14px;padding:10px;text-align:center}
+.summary-box b{display:block;font-size:17px;margin-top:4px}
+.expense-row{display:grid;grid-template-columns:1fr auto;gap:12px;padding:11px 0;border-top:1px solid var(--line)}
+.expense-row:first-child{border-top:0}
+.expense-main{min-width:0}
+.expense-title{font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.expense-sub{font-size:12px;color:var(--muted);margin-top:3px}
+.amount{font-weight:800}
+.delete-btn{border:0;background:transparent;color:#a56b5d;font-size:12px;padding:4px 0 0}
+.settle{margin-top:10px;background:#eef5f0;border-radius:14px;padding:12px;color:#315b43;font-size:13px;line-height:1.55}
+.empty{color:var(--muted);font-size:13px;padding:6px 0}
+
+
+.guide-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.tabbtn{border:1px solid #dfe5df;background:#f7f9f7;color:#496052;padding:7px 10px;border-radius:999px;font-size:12px}
+.tip-card{border:1px solid #e9ece8;border-radius:14px;padding:12px;margin-top:10px;background:#fcfcfa}
+.tip-card .tip-head{display:flex;justify-content:space-between;gap:10px}
+.tip-card .tip-title{font-weight:700}
+.tip-card .tip-place{font-size:12px;color:var(--green);margin-top:3px}
+.tip-card .tip-body{font-size:13px;line-height:1.6;color:#526159;margin-top:7px;white-space:pre-wrap}
+.danger{background:#fff0ef;border-color:#f0d4d1}
+.good{background:#f1f7f2;border-color:#d8e8dc}
+.guide-form{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.guide-form .full{grid-column:1/-1}
+textarea.input{min-height:90px;resize:vertical}
+.secondary-btn{border:1px solid #cfd8d1;border-radius:12px;padding:10px 12px;background:#fff;color:#486050;font-size:13px;font-weight:700}
+.inline-actions{display:flex;gap:8px;margin-top:10px}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+  <section class="hero">
+    <div class="eyebrow">2026 · 甘南 / 川西北</div>
+    <h1>高原公路旅行</h1>
+    <p>长沙 → 兰州 → 夏河 → 合作 → 郎木寺 → 阿坝 → 莲宝叶则 → 成都 → 衡阳</p>
+    <div class="pills">
+      <span class="pill">9/25–10/4</span><span class="pill">10 天</span><span class="pill">公共交通为主</span><span class="pill">摄影 / 山系</span>
+    </div>
+  </section>
+
+  <section class="section" id="flight">
+    <h2>✈️ 航班</h2>
+    <div class="card">
+      <div class="small" style="color:#718078;margin-bottom:10px">9/25 · 东方航空 MU2400</div>
+      <div class="flight">
+        <div class="airport"><strong>20:55</strong><span>长沙黄花 T2</span></div>
+        <div class="center"><div class="plane">→</div><div>约 2h40m</div></div>
+        <div class="airport" style="text-align:right"><strong>23:35</strong><span>兰州中川 T3</span></div>
+      </div>
+      <div class="meta">截图里显示预计起飞 20:55、预计到达 22:57；计划时刻为 20:55–23:35。实际以当天航司信息为准。</div>
+    </div>
+  </section>
+
+  <section class="section" id="stay">
+    <h2>🏨 住宿</h2>
+    <div class="card">
+      <div class="title">9/25 · 汉庭兰州中川国际机场 T3 航站楼酒店</div>
+      <div class="meta">订单已确认 · 在线付 ¥222.04 · 双床房 · 可住 2 人 · 约 25㎡ · 禁烟 · 有窗</div>
+      <span class="tag">免费 Wi‑Fi</span><span class="tag">独立卫浴</span>
+      <span class="tag warn">9/25 18:00 前可免费取消</span>
+      <div class="meta">截图显示入住时间 12:00 后，退房约 14:00。</div>
+    </div>
+  </section>
+
+  <section class="section" id="transport">
+    <h2>🚌 兰州 → 夏河</h2>
+    <div class="card">
+      <div class="title">兰州汽车南站 → 夏河</div>
+      <div class="meta">你收藏的攻略提到常见班次约 08:30、10:30、14:00、15:00；下午两班有时要到当天临近发车才会在平台显示。</div>
+      <span class="tag">建议提前 1 天电话确认</span>
+      <div class="meta">车票示例里可辨识票价约 ¥75。具体班次、票价、到站时间以当天车站信息为准。</div>
+    </div>
+  </section>
+
+  <section class="section" id="days">
+    <h2>🗓️ 每日行程</h2>
+    <div class="card">
+      
+      <div class="timeline">
+        <div class="stop"><div class="route"><div class="date">9/25</div><div><div class="title">长沙 → 兰州</div><div class="meta">晚班机抵达，住兰州中川机场附近。</div></div></div></div>
+        <div class="stop"><div class="route"><div class="date">9/26</div><div><div class="title">兰州 → 夏河 · 拉卜楞寺</div><div class="meta">乘大巴前往夏河，抵达后游览拉卜楞寺。</div></div></div></div>
+        <div class="stop"><div class="route"><div class="date">9/27</div><div><div class="title">夏河</div><div class="meta">夏河停留一天，可根据天气安排桑科草原、县城休整或补充游览。</div></div></div></div>
+        <div class="stop"><div class="route"><div class="date">9/28</div><div><div class="title">夏河 → 合作 → 郎木寺</div><div class="meta">移动日，经合作前往郎木寺，具体车次/接驳待确认。</div></div></div></div>
+        <div class="stop"><div class="route"><div class="date">9/29</div><div><div class="title">郎木寺</div><div class="meta">郎木寺一日，可安排甘肃寺、四川寺及镇内步行。</div></div></div></div>
+        <div class="stop"><div class="route"><div class="date">9/30</div><div><div class="title">郎木寺 → 阿坝县</div><div class="meta">长距离移动日，建议提前确认班车/拼车与到达时间。</div></div></div></div>
+        <div class="stop"><div class="route"><div class="date">10/1</div><div><div class="title">莲宝叶则 · 各莫寺</div><div class="meta">阿坝县周边游览，优先安排莲宝叶则与各莫寺。</div></div></div></div>
+        <div class="stop"><div class="route"><div class="date">10/2</div><div><div class="title">莲宝叶则 · 各莫寺</div><div class="meta">保留第二天作为深度游览或天气机动日。</div></div></div></div>
+        <div class="stop"><div class="route"><div class="date">10/3</div><div><div class="title">阿坝县 → 成都</div><div class="meta">返程移动日，交通方式与预计抵达时间待补。</div></div></div></div>
+        <div class="stop"><div class="route"><div class="date">10/4</div><div><div class="title">成都 → 衡阳</div><div class="meta">返程航班/高铁信息待补充。</div></div></div></div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>🗺️ 路线参考</h2>
+    <div class="card">
+      <div class="title">已纳入你上传的甘南环线图</div>
+      <div class="meta">新版路线为兰州 → 夏河 → 合作 → 郎木寺 → 阿坝县 → 莲宝叶则 → 成都。下一版可以继续补充每天一段的交通方式、里程、预计车程和住宿。</div>
+    </div>
+  </section>
+
+
+
+  <section class="section" id="toilet">
+    <h2>🚻 厕所攻略</h2>
+    <div class="card">
+      <div class="guide-tabs">
+        <span class="tag">重点收藏</span>
+        <span class="tag">沿途避雷</span>
+        <span class="tag">可随时新增</span>
+      </div>
+
+      <div class="tip-card good">
+        <div class="tip-title">🏅 阿万仓湿地游客中心</div>
+        <div class="tip-body">坑位多、无异味，洗手水流充足。</div>
+      </div>
+      <div class="tip-card good">
+        <div class="tip-title">🏅 莲宝叶则景区餐厅厕所</div>
+        <div class="tip-body">明亮宽敞，冲水水压大。</div>
+      </div>
+      <div class="tip-card good">
+        <div class="tip-title">🏅 拉卜楞寺游客中心</div>
+        <div class="tip-body">注意是游客中心，不是停车场。配母婴沙发，厕所分布较密集。</div>
+      </div>
+      <div class="tip-card good">
+        <div class="tip-title">📍 合作市大型加油站</div>
+        <div class="tip-body">常备纸巾，相对干净整洁。</div>
+      </div>
+      <div class="tip-card good">
+        <div class="tip-title">📍 临夏服务区</div>
+        <div class="tip-body">24 小时保洁，提供热水洗手。</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-title">📍 迭部县城区公厕</div>
+        <div class="tip-body">有定时打扫。</div>
+      </div>
+
+      <div class="tip-card">
+        <div class="tip-title">📍 扎尕那</div>
+        <div class="tip-body">入口水厕环境较差，但还能忍受；住宿酒店提前排空更稳妥。景区移动厕所旺季可能排队较久。</div>
+      </div>
+      <div class="tip-card danger">
+        <div class="tip-title">❌ 郎木寺四川寺旱厕</div>
+        <div class="tip-body">异味很重，尽量避开。</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-title">📍 郎木寺甘肃寺</div>
+        <div class="tip-body">可用水厕，路过时可优先解决。</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-title">📍 郭莽湿地</div>
+        <div class="tip-body">水厕，通常不用长时间排队。</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-title">📍 桑科草原</div>
+        <div class="tip-body">简易水厕，味道一般，但有水。</div>
+      </div>
+      <div class="tip-card danger">
+        <div class="tip-title">⚠️ 黄河九曲第一湾</div>
+        <div class="tip-body">可能排队较久、气味较重；尽量在镇上或游客中心提前解决。</div>
+      </div>
+      <div class="tip-card danger">
+        <div class="tip-title">⚠️ 洛克之路</div>
+        <div class="tip-body">全程正规厕所非常少，出发前务必解决。铁布镇中石油加油站可作为进入洛克之路前的重要补给点。</div>
+      </div>
+
+      <div class="tip-card">
+        <div class="tip-title">🎒 厕所续命装备</div>
+        <div class="tip-body">大包抽纸 + 独立湿厕纸；建议再带免洗洗手液、垃圾袋。部分路段可能无信号，户外应急用品要提前准备。</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="title">＋ 新增厕所攻略</div>
+      <div class="guide-form" style="margin-top:12px">
+        <div>
+          <div class="small" style="margin-bottom:5px;color:var(--muted)">地点</div>
+          <input class="input" id="toiletPlace" placeholder="例如：扎尕那游客中心">
+        </div>
+        <div>
+          <div class="small" style="margin-bottom:5px;color:var(--muted)">评价</div>
+          <select id="toiletRating">
+            <option value="good">推荐</option>
+            <option value="normal">一般</option>
+            <option value="danger">避雷</option>
+          </select>
+        </div>
+        <div class="full">
+          <div class="small" style="margin-bottom:5px;color:var(--muted)">攻略 / 备注</div>
+          <textarea class="input" id="toiletNote" placeholder="环境、是否排队、有没有纸、水、开放时间等"></textarea>
+        </div>
+        <div class="full"><button class="btn" onclick="addToiletTip()">＋ 保存厕所攻略</button></div>
+      </div>
+      <div id="toiletUserList" style="margin-top:10px"></div>
+    </div>
+  </section>
+
+  <section class="section" id="notes">
+    <h2>📝 攻略 & 备注</h2>
+    <div class="card">
+      <div class="guide-form">
+        <div>
+          <div class="small" style="margin-bottom:5px;color:var(--muted)">标题</div>
+          <input class="input" id="guideTitle" placeholder="例如：扎尕那摄影机位">
+        </div>
+        <div>
+          <div class="small" style="margin-bottom:5px;color:var(--muted)">类型</div>
+          <select id="guideType">
+            <option>攻略</option>
+            <option>备注</option>
+            <option>交通</option>
+            <option>住宿</option>
+            <option>餐饮</option>
+            <option>摄影</option>
+            <option>其他</option>
+          </select>
+        </div>
+        <div class="full">
+          <div class="small" style="margin-bottom:5px;color:var(--muted)">内容</div>
+          <textarea class="input" id="guideBody" placeholder="任何想随时补充的信息都可以写在这里"></textarea>
+        </div>
+        <div class="full"><button class="btn" onclick="addGuideNote()">＋ 新增攻略 / 备注</button></div>
+      </div>
+      <div id="guideList" style="margin-top:12px"></div>
+    </div>
+    <p class="note">你新增的厕所攻略、旅行攻略和备注都会保存在当前浏览器本机。</p>
+  </section>
+
+  <section class="section" id="expense">
+    <h2>💰 花费记录</h2>
+    <div class="card">
+      <div class="expense-form">
+        <div>
+          <div class="small" style="margin-bottom:5px;color:var(--muted)">付款人</div>
+          <select id="payer">
+            <option value="王">王</option>
+            <option value="欧">欧</option>
+          </select>
+        </div>
+        <div>
+          <div class="small" style="margin-bottom:5px;color:var(--muted)">金额（¥）</div>
+          <input class="input" id="amount" inputmode="decimal" placeholder="0.00">
+        </div>
+        <div>
+          <div class="small" style="margin-bottom:5px;color:var(--muted)">类别</div>
+          <select id="category">
+            <option>交通</option><option>住宿</option><option>餐饮</option>
+            <option>门票</option><option>购物</option><option>其他</option>
+          </select>
+        </div>
+        <div>
+          <div class="small" style="margin-bottom:5px;color:var(--muted)">日期</div>
+          <input class="input" id="expDate" type="date">
+        </div>
+        <div class="full">
+          <div class="small" style="margin-bottom:5px;color:var(--muted)">备注</div>
+          <input class="input" id="note" placeholder="例如：兰州机场酒店">
+        </div>
+        <div class="full"><button class="btn" onclick="addExpense()">＋ 添加一笔</button></div>
+      </div>
+
+      <div class="summary-grid">
+        <div class="summary-box"><span class="small">总花费</span><b id="totalAmt">¥0.00</b></div>
+        <div class="summary-box"><span class="small">王已付</span><b id="wangAmt">¥0.00</b></div>
+        <div class="summary-box"><span class="small">欧已付</span><b id="ouAmt">¥0.00</b></div>
+      </div>
+
+      <div id="settlement" class="settle">目前还没有花费记录。</div>
+      <div id="expenseList" style="margin-top:10px"><div class="empty">暂无记录</div></div>
+    </div>
+    <p class="note">记录会保存在当前浏览器本机。默认按两人 50/50 平摊计算谁需要补给谁。</p>
+  </section>
+
+  <section class="section" id="todo">
+    <h2>✅ To Do / 行李</h2>
+    <div class="card">
+      <div class="todo"><div class="box"></div><div>牙膏、牙刷</div></div>
+      <div class="todo"><div class="box"></div><div>相机 / 胶片机 / Ace Pro</div></div>
+      <div class="todo"><div class="box"></div><div>电池 / 充电设备</div></div>
+      <div class="todo"><div class="box"></div><div>身份证</div></div>
+      <div class="todo"><div class="box"></div><div>洗面奶、防晒霜</div></div>
+      <div class="todo"><div class="box"></div><div>冲锋衣 ×2、薄款羽绒、秋裤</div></div>
+      <div class="todo"><div class="box"></div><div>拖鞋、一次性毛巾、袜子、围巾</div></div>
+      <div class="todo"><div class="box"></div><div>墨镜</div></div>
+      <div class="todo"><div class="box"></div><div>药品：布洛芬、维生素等</div></div>
+    </div>
+  </section>
+</div>
+
+<div class="footer-nav"><div class="inner">
+  <a href="#flight">航班</a><a href="#stay">住宿</a><a href="#days">行程</a><a href="#toilet">厕所</a><a href="#notes">攻略</a><a href="#expense">花费</a><a href="#todo">待办</a>
+</div></div>
+
+<script>
+const KEY='gannan_expenses_v1';
+function getExpenses(){try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){return []}}
+function saveExpenses(x){localStorage.setItem(KEY,JSON.stringify(x))}
+function money(n){return '¥'+Number(n||0).toFixed(2)}
+function addExpense(){
+  const payer=document.getElementById('payer').value;
+  const amount=parseFloat(document.getElementById('amount').value);
+  const category=document.getElementById('category').value;
+  const date=document.getElementById('expDate').value;
+  const note=document.getElementById('note').value.trim();
+  if(!amount || amount<=0){alert('请输入正确金额');return}
+  const arr=getExpenses();
+  arr.unshift({id:Date.now(),payer,amount,category,date,note});
+  saveExpenses(arr);
+  document.getElementById('amount').value='';
+  document.getElementById('note').value='';
+  renderExpenses();
+}
+function delExpense(id){
+  const arr=getExpenses().filter(x=>x.id!==id);
+  saveExpenses(arr); renderExpenses();
+}
+function renderExpenses(){
+  const arr=getExpenses();
+  const total=arr.reduce((s,x)=>s+Number(x.amount),0);
+  const wang=arr.filter(x=>x.payer==='王').reduce((s,x)=>s+Number(x.amount),0);
+  const ou=arr.filter(x=>x.payer==='欧').reduce((s,x)=>s+Number(x.amount),0);
+  document.getElementById('totalAmt').textContent=money(total);
+  document.getElementById('wangAmt').textContent=money(wang);
+  document.getElementById('ouAmt').textContent=money(ou);
+  const half=total/2;
+  const diff=wang-half;
+  const st=document.getElementById('settlement');
+  if(total===0){st.textContent='目前还没有花费记录。'}
+  else if(Math.abs(diff)<0.005){st.textContent='两人目前已结平，无需补款。'}
+  else if(diff>0){st.textContent='按 50/50 平摊：欧需补给王 '+money(diff)+'。每人应承担 '+money(half)+'。'}
+  else{st.textContent='按 50/50 平摊：王需补给欧 '+money(-diff)+'。每人应承担 '+money(half)+'。'}
+  const list=document.getElementById('expenseList');
+  if(!arr.length){list.innerHTML='<div class="empty">暂无记录</div>';return}
+  list.innerHTML=arr.map(x=>`
+    <div class="expense-row">
+      <div class="expense-main">
+        <div class="expense-title">${escapeHtml(x.note||x.category)}</div>
+        <div class="expense-sub">${escapeHtml(x.date||'未填日期')} · ${escapeHtml(x.category)} · ${escapeHtml(x.payer)}付款</div>
+      </div>
+      <div style="text-align:right">
+        <div class="amount">${money(x.amount)}</div>
+        <button class="delete-btn" onclick="delExpense(${x.id})">删除</button>
+      </div>
+    </div>`).join('');
+}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+document.addEventListener('DOMContentLoaded',()=>{
+  const d=document.getElementById('expDate');
+  if(d && !d.value) d.value='2026-09-25';
+  renderExpenses();
+});
+</script>
+
+<script>
+const TOILET_KEY='gannan_toilet_tips_v1';
+const GUIDE_KEY='gannan_guide_notes_v1';
+
+function loadList(key){
+  try{return JSON.parse(localStorage.getItem(key)||'[]')}catch(e){return []}
+}
+function saveList(key,arr){localStorage.setItem(key,JSON.stringify(arr))}
+
+function addToiletTip(){
+  const place=document.getElementById('toiletPlace').value.trim();
+  const rating=document.getElementById('toiletRating').value;
+  const note=document.getElementById('toiletNote').value.trim();
+  if(!place && !note){alert('至少填写地点或攻略内容');return}
+  const arr=loadList(TOILET_KEY);
+  arr.unshift({id:Date.now(),place:place||'未命名地点',rating,note});
+  saveList(TOILET_KEY,arr);
+  document.getElementById('toiletPlace').value='';
+  document.getElementById('toiletNote').value='';
+  renderToiletTips();
+}
+function delToiletTip(id){
+  saveList(TOILET_KEY,loadList(TOILET_KEY).filter(x=>x.id!==id));
+  renderToiletTips();
+}
+function renderToiletTips(){
+  const arr=loadList(TOILET_KEY);
+  const box=document.getElementById('toiletUserList');
+  if(!box) return;
+  if(!arr.length){box.innerHTML='<div class="empty">你还没有新增厕所攻略。</div>';return}
+  const labels={good:'推荐',normal:'一般',danger:'避雷'};
+  box.innerHTML=arr.map(x=>`
+    <div class="tip-card ${x.rating==='good'?'good':x.rating==='danger'?'danger':''}">
+      <div class="tip-head">
+        <div>
+          <div class="tip-title">${escapeHtml(x.place)}</div>
+          <div class="tip-place">${labels[x.rating]||'一般'}</div>
+        </div>
+        <button class="delete-btn" onclick="delToiletTip(${x.id})">删除</button>
+      </div>
+      <div class="tip-body">${escapeHtml(x.note||'')}</div>
+    </div>`).join('');
+}
+
+function addGuideNote(){
+  const title=document.getElementById('guideTitle').value.trim();
+  const type=document.getElementById('guideType').value;
+  const body=document.getElementById('guideBody').value.trim();
+  if(!title && !body){alert('至少填写标题或内容');return}
+  const arr=loadList(GUIDE_KEY);
+  arr.unshift({id:Date.now(),title:title||'未命名',type,body});
+  saveList(GUIDE_KEY,arr);
+  document.getElementById('guideTitle').value='';
+  document.getElementById('guideBody').value='';
+  renderGuideNotes();
+}
+function delGuideNote(id){
+  saveList(GUIDE_KEY,loadList(GUIDE_KEY).filter(x=>x.id!==id));
+  renderGuideNotes();
+}
+function renderGuideNotes(){
+  const arr=loadList(GUIDE_KEY);
+  const box=document.getElementById('guideList');
+  if(!box) return;
+  if(!arr.length){box.innerHTML='<div class="empty">暂无新增攻略或备注。</div>';return}
+  box.innerHTML=arr.map(x=>`
+    <div class="tip-card">
+      <div class="tip-head">
+        <div>
+          <div class="tip-title">${escapeHtml(x.title)}</div>
+          <div class="tip-place">${escapeHtml(x.type)}</div>
+        </div>
+        <button class="delete-btn" onclick="delGuideNote(${x.id})">删除</button>
+      </div>
+      <div class="tip-body">${escapeHtml(x.body||'')}</div>
+    </div>`).join('');
+}
+document.addEventListener('DOMContentLoaded',()=>{
+  renderToiletTips();
+  renderGuideNotes();
+});
+</script>
+</body>
+</html>
