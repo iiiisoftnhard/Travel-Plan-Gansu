@@ -31,9 +31,6 @@ body{margin:0;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,
 .timeline{border-left:2px solid #d7ded9;margin-left:7px;padding-left:18px}
 .stop{position:relative;margin:0 0 18px}
 .stop:before{content:"";position:absolute;width:10px;height:10px;border-radius:50%;background:var(--green);left:-24px;top:5px;box-shadow:0 0 0 4px #edf3ef}
-.todo{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-bottom:1px solid var(--line)}
-.todo:last-child{border-bottom:0}
-.box{width:18px;height:18px;border:1.6px solid #aeb8b1;border-radius:5px;flex:0 0 auto;margin-top:1px}
 .note{font-size:12px;color:var(--muted);line-height:1.6}
 .small{font-size:12px}
 .footer-nav{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,.92);backdrop-filter:blur(12px);border-top:1px solid #e8e8e5}
@@ -73,6 +70,15 @@ a{color:inherit;text-decoration:none}
 textarea.input{min-height:90px;resize:vertical}
 .secondary-btn{border:1px solid #cfd8d1;border-radius:12px;padding:10px 12px;background:#fff;color:#486050;font-size:13px;font-weight:700}
 .inline-actions{display:flex;gap:8px;margin-top:10px}
+.hl-yellow{display:inline-block;background:#ffef88;color:#6b5600;font-weight:700;padding:0 6px;border-radius:7px}
+.day-grid{display:grid;grid-template-columns:92px 1fr;gap:12px}
+.day-badge{background:#f1f7f2;color:var(--green);border-radius:14px;padding:12px 8px;text-align:center;font-weight:800;line-height:1.35}
+.info-list{display:grid;gap:8px;margin-top:6px}
+.info-item{background:#fbfbf8;border:1px solid #ebece6;border-radius:14px;padding:10px 12px}
+.info-label{font-size:12px;color:var(--muted);margin-bottom:4px}
+.info-text{font-size:14px;line-height:1.75}
+.info-text.small{font-size:13px}
+@media (max-width:560px){.day-grid{grid-template-columns:1fr}.day-badge{text-align:left}}
 
 </style>
 </head>
@@ -132,6 +138,48 @@ textarea.input{min-height:90px;resize:vertical}
     </div>
   </section>
 
+
+  <section class="section" id="langmusi-guide">
+    <h2>🚌 夏河 → 合作 → 郎木寺</h2>
+    <div class="card">
+      <div class="title">夏河 → 合作 → 郎木寺</div>
+      <div class="meta">按你收藏的攻略，推荐这样衔接：</div>
+      <div class="tip-card good">
+        <div class="tip-title">① 夏河县公共汽车站 → 合作北汽车站</div>
+        <div class="tip-body">约 08:20 发车，约 09:25 到达，参考票价 ¥22。</div>
+      </div>
+      <div class="tip-card good">
+        <div class="tip-title">② 合作北站 → 合作南站</div>
+        <div class="tip-body">两站之间建议直接打车，预留换乘时间。</div>
+      </div>
+      <div class="tip-card good">
+        <div class="tip-title">③ 合作南汽车站 → 郎木寺</div>
+        <div class="tip-body">攻略参考班次 11:20 出发，约 14:30 到达，参考票价 ¥51。</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-title">④ 郎木寺路口 → 郎木寺镇</div>
+        <div class="tip-body">可搭乘路过车辆进镇，攻略参考费用约 ¥5。</div>
+      </div>
+      <span class="tag">预计下午到郎木寺</span>
+      <span class="tag">中转：合作北站→南站</span>
+      <span class="tag warn">班次以当天车站为准</span>
+    </div>
+
+    <div class="card">
+      <div class="title">郎木寺游玩建议</div>
+      <div class="meta">到镇办理入住后，可优先安排四川格尔底寺 / 纳摩大峡谷；截图攻略参考门票 ¥40。</div>
+      <span class="tag">四川格尔底寺</span>
+      <span class="tag">纳摩大峡谷</span>
+      <span class="tag">简餐</span>
+      <div class="meta">攻略里的住宿参考：郎木寺山屿拾光客栈。</div>
+    </div>
+
+    <div class="card">
+      <div class="title">备用：夏河 ↔ 兰州客车时刻</div>
+      <div class="meta">你现场拍到的车内信息显示，夏河早班约 06:30、08:30 发车；兰州回夏河约 14:00、15:00 发车。可作为临时改线备用，具体以当天车辆和站点通知为准。</div>
+    </div>
+  </section>
+
   <section class="section" id="days">
     <h2>🗓️ 每日行程</h2>
     <div class="card">
@@ -140,8 +188,8 @@ textarea.input{min-height:90px;resize:vertical}
         <div class="stop"><div class="route"><div class="date">9/25</div><div><div class="title">长沙 → 兰州</div><div class="meta">晚班机抵达，住兰州中川机场附近。</div></div></div></div>
         <div class="stop"><div class="route"><div class="date">9/26</div><div><div class="title">兰州 → 夏河 · 入住拉卜楞寺附近</div><div class="meta">14:00 从兰州汽车南站乘车前往完尔滩方向（¥69/人），随后前往夏河；入住夏河霞客行青年旅舍（拉卜楞寺店），房费 ¥101。视抵达时间安排拉卜楞寺周边散步。</div></div></div></div>
         <div class="stop"><div class="route"><div class="date">9/27</div><div><div class="title">夏河一日</div><div class="meta">12:00 前退房。重点安排拉卜楞寺，也可根据天气和体力增加桑科草原、县城闲逛或休整。</div></div></div></div>
-        <div class="stop"><div class="route"><div class="date">9/28</div><div><div class="title">夏河 → 合作 → 郎木寺</div><div class="meta">移动日，经合作前往郎木寺，具体车次/接驳待确认。</div></div></div></div>
-        <div class="stop"><div class="route"><div class="date">9/29</div><div><div class="title">郎木寺</div><div class="meta">郎木寺一日，可安排甘肃寺、四川寺及镇内步行。</div></div></div></div>
+        <div class="stop"><div class="route"><div class="date">9/28</div><div><div class="title">夏河 → 合作 → 郎木寺</div><div class="meta">参考方案：08:20 夏河汽车站出发 → 约 09:25 到合作北站（¥22）→ 打车去合作南站 → 11:20 发往郎木寺，约 14:30 到（¥51）→ 郎木寺路口搭车进镇（约 ¥5）。入住后可去四川格尔底寺 / 纳摩大峡谷。</div></div></div></div>
+        <div class="stop"><div class="route"><div class="date">9/29</div><div><div class="title">郎木寺一日</div><div class="meta">可补充甘肃寺、四川格尔底寺、纳摩大峡谷与镇内步行；根据 9/28 实际到达时间灵活调整。</div></div></div></div>
         <div class="stop"><div class="route"><div class="date">9/30</div><div><div class="title">郎木寺 → 阿坝县</div><div class="meta">长距离移动日，建议提前确认班车/拼车与到达时间。</div></div></div></div>
         <div class="stop"><div class="route"><div class="date">10/1</div><div><div class="title">莲宝叶则 · 各莫寺</div><div class="meta">阿坝县周边游览，优先安排莲宝叶则与各莫寺。</div></div></div></div>
         <div class="stop"><div class="route"><div class="date">10/2</div><div><div class="title">莲宝叶则 · 各莫寺</div><div class="meta">保留第二天作为深度游览或天气机动日。</div></div></div></div>
@@ -256,6 +304,134 @@ textarea.input{min-height:90px;resize:vertical}
     </div>
   </section>
 
+
+  <section class="section" id="daily-guide">
+    <h2>📒 每日行程参考（自由行攻略）</h2>
+
+
+    <div class="card">
+      <div class="day-grid">
+        <div class="day-badge">9/27<br>夏河攻略</div>
+        <div>
+          <div class="title">夏河一日参考</div>
+          <div class="meta">根据你新发的攻略截图整理，以下为攻略作者的实际体验与建议。</div>
+          <div class="info-list">
+            <div class="info-item">
+              <div class="info-label">景点 / 氛围</div>
+              <div class="info-text">夏河县城整体很有高原小城的感觉，攻略作者形容为“淳朴、粗犷、冷冽”。当天可以把 <span class="hl-yellow">拉卜楞寺</span> 作为主景点，再根据时间去 <span class="hl-yellow">桑科草原</span>。</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">桑科草原</div>
+              <div class="info-text">截图攻略提到，淡季时草原很空旷、游客少，体验很好；如果遇到旺季，建议尽量避开 <span class="hl-yellow">游客中心</span> 周边，往草原更深处走，环境会更安静。草原开放情况可能随季节变化，出发前建议再确认。</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">住宿建议</div>
+              <div class="info-text">如果住草原民宿，攻略作者的体验是：房间本身比较干净，但部分民宿 <span class="hl-yellow">卫生间在房间外</span>，洗澡条件相对一般；部分房间会配 <span class="hl-yellow">电热毯</span>。旺季更推荐远离游客中心的营地或民宿。</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">藏餐推荐</div>
+              <div class="info-text">截图里收藏/提到的餐厅包括：<span class="hl-yellow">康卓藏膳厅</span>、<span class="hl-yellow">喜马拉雅藏餐厅</span>、<span class="hl-yellow">乌泽林卡藏餐厅</span>。攻略作者实际吃的是 <span class="hl-yellow">尼巴贡藏阁</span>，评价环境不错、藏饭和牛肉类菜品表现好。</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">酸奶 / 早餐</div>
+              <div class="info-text">夏河街上酸奶店很多，攻略作者觉得整体差异不大，普遍加糖后都很好吃。另提到约 <span class="hl-yellow">10:00</span> 在 <span class="hl-yellow">拉卜楞寺门口</span> 遇到当地人布施酸奶，游客也能领到；是否每天都有不能保证，可以当作偶遇彩蛋。</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">当天建议节奏</div>
+              <div class="info-text">上午优先 <span class="hl-yellow">拉卜楞寺</span>，中午在县城吃藏餐，下午根据天气和体力去 <span class="hl-yellow">桑科草原</span>；如果不想赶路，也可以留在县城慢慢逛、喝咖啡、休整。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="day-grid">
+        <div class="day-badge">9/28<br>夏河 → 合作 → 郎木寺</div>
+        <div>
+          <div class="title">第一天参考走法</div>
+          <div class="meta">根据你新发的攻略整理成栏目，方便你后面继续补充。</div>
+          <div class="info-list">
+            <div class="info-item">
+              <div class="info-label">交通</div>
+              <div class="info-text">从 <span class="hl-yellow">夏河公共汽车站</span> 乘 <span class="hl-yellow">8:40</span> 班车到 <span class="hl-yellow">合作客运北站</span>，约 <span class="hl-yellow">10:00</span> 到。可先向司机要去 <span class="hl-yellow">郎木寺</span> 方向车辆的电话。根据攻略，车会在 <span class="hl-yellow">10:30</span> 左右到 <span class="hl-yellow">合作客运北站</span>，之后约 <span class="hl-yellow">13:30</span> 去 <span class="hl-yellow">合作汽车南站</span> 接人，再出发去 <span class="hl-yellow">郎木寺镇</span>，约 <span class="hl-yellow">17:00</span> 到镇上。</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">空档可去的景点</div>
+              <div class="info-text">在合作等车的空档，可以去 <span class="hl-yellow">米拉日巴佛阁</span> 游览，打发中间等车时间。</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">住宿</div>
+              <div class="info-text">到达 <span class="hl-yellow">郎木寺镇</span> 后先办理入住，安顿后可再去周边走走。</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">晚上安排</div>
+              <div class="info-text">傍晚可去 <span class="hl-yellow">甘肃郎木寺</span> 轻松游览，作为第一晚的轻量行程。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="day-grid">
+        <div class="day-badge">9/29<br>郎木寺 → 花湖 → 扎尕那</div>
+        <div>
+          <div class="title">第二天参考走法</div>
+          <div class="meta">适合作为郎木寺继续往下走的参考版本。</div>
+          <div class="info-list">
+            <div class="info-item">
+              <div class="info-label">上午景点</div>
+              <div class="info-text">早上约 <span class="hl-yellow">8:00</span> 去 <span class="hl-yellow">四川郎木寺</span> 游览，再徒步 <span class="hl-yellow">纳摩大峡谷</span>。</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">包车信息</div>
+              <div class="info-text">约 <span class="hl-yellow">10:30</span> 可在 <span class="hl-yellow">四川郎木寺大门口</span> 找车。攻略里参考价格为 <span class="hl-yellow">¥300 包车</span>，不限时间，可随时停车拍照，全程不接其他客人。</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">下午景点</div>
+              <div class="info-text">包车前往 <span class="hl-yellow">花湖景区</span> 游玩，之后继续送到 <span class="hl-yellow">扎尕那民宿</span>。</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">关键词</div>
+              <div class="info-text small"><span class="hl-yellow">夏河公共汽车站</span>、<span class="hl-yellow">合作客运北站</span>、<span class="hl-yellow">合作汽车南站</span>、<span class="hl-yellow">米拉日巴佛阁</span>、<span class="hl-yellow">甘肃郎木寺</span>、<span class="hl-yellow">四川郎木寺</span>、<span class="hl-yellow">纳摩大峡谷</span>、<span class="hl-yellow">花湖景区</span>、<span class="hl-yellow">扎尕那民宿</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="card">
+      <div class="title">🌬️ 腹式呼吸方法</div>
+      <div class="meta">高原途中如果因为紧张、走快了或轻微气喘，可以用来帮助放慢呼吸节奏；它不能替代高反处理。</div>
+      <div class="info-list">
+        <div class="info-item">
+          <div class="info-label">动作</div>
+          <div class="info-text">坐下或站稳，肩膀放松。一只手放在胸口，一只手放在腹部。尽量让 <span class="hl-yellow">腹部起伏</span>，胸口少动。</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">呼吸节奏</div>
+          <div class="info-text"><span class="hl-yellow">鼻吸 4 秒</span> → 感觉肚子慢慢鼓起 → <span class="hl-yellow">嘴呼 6 秒</span>，像轻轻吹蜡烛一样把气呼出去。</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">做多久</div>
+          <div class="info-text">连续做 <span class="hl-yellow">5–10 轮</span>，大约 1–3 分钟。以舒服为准，不要刻意憋气，也不要快速大口呼吸。</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">高原注意</div>
+          <div class="info-text">如果出现明显头痛、持续恶心、走路不稳、胸闷加重、呼吸困难等情况，不要只靠呼吸法硬扛，应停止活动并尽快寻求帮助。</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="title">使用说明</div>
+      <div class="meta">我已经把关键词做成黄色高亮，后面你如果还要补充其它天，比如阿坝 / 莲宝叶则 / 成都，也可以继续按这个格式往下加。</div>
+    </div>
+  </section>
+
+
   <section class="section" id="notes">
     <h2>📝 攻略 & 备注</h2>
     <div class="card">
@@ -331,25 +507,10 @@ textarea.input{min-height:90px;resize:vertical}
     </div>
     <p class="note">花费会保存到 Cloudflare D1，两个人打开同一个网址即可共享。默认按两人 50/50 平摊。</p>
   </section>
-
-  <section class="section" id="todo">
-    <h2>✅ To Do / 行李</h2>
-    <div class="card">
-      <div class="todo"><div class="box"></div><div>牙膏、牙刷</div></div>
-      <div class="todo"><div class="box"></div><div>相机 / 胶片机 / Ace Pro</div></div>
-      <div class="todo"><div class="box"></div><div>电池 / 充电设备</div></div>
-      <div class="todo"><div class="box"></div><div>身份证</div></div>
-      <div class="todo"><div class="box"></div><div>洗面奶、防晒霜</div></div>
-      <div class="todo"><div class="box"></div><div>冲锋衣 ×2、薄款羽绒、秋裤</div></div>
-      <div class="todo"><div class="box"></div><div>拖鞋、一次性毛巾、袜子、围巾</div></div>
-      <div class="todo"><div class="box"></div><div>墨镜</div></div>
-      <div class="todo"><div class="box"></div><div>药品：布洛芬、维生素等</div></div>
-    </div>
-  </section>
 </div>
 
 <div class="footer-nav"><div class="inner">
-  <a href="#flight">航班</a><a href="#stay">住宿</a><a href="#days">行程</a><a href="#toilet">厕所</a><a href="#notes">攻略</a><a href="#expense">花费</a><a href="#todo">待办</a>
+  <a href="#flight">航班</a><a href="#stay">住宿</a><a href="#days">行程</a><a href="#toilet">厕所</a><a href="#notes">攻略</a><a href="#expense">花费</a>
 </div></div>
 
 
